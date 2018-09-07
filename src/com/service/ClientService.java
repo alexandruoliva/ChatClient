@@ -1,5 +1,7 @@
 package com.service;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -24,7 +26,18 @@ public class ClientService {
 	public ClientService(String host, ClientGui gui) {
 		serverIp = host;
 		this.gui=gui;
+		
+		this.gui.getInputTextTab().addActionListener(new ActionListener() {
+			public ClientService service;
+			private ClientGui gui;
 
+			public void actionPerformed(ActionEvent event) {
+				// getActionCommand sends the message;
+				this.service.sendMessage(event.getActionCommand());
+				this.gui.getOutputTextTab().setText("");
+
+			}
+		});
 	}
 
 	public void startRunning() {
@@ -127,4 +140,8 @@ public class ClientService {
 			}
 		});
 	}
+	
+	
+
+	
 }

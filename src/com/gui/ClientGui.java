@@ -31,7 +31,6 @@ public class ClientGui extends JPanel {
 	GridBagConstraints gridBagCon = new GridBagConstraints();
 	
 	
-	private ClientService service;
 	
 	
 	public JTextField getInputTextTab() {
@@ -49,12 +48,9 @@ public class ClientGui extends JPanel {
 	public void setOutputTextTab(JTextArea outputTextTab) {
 		this.outputTextTab = outputTextTab;
 	}
-	public ClientGui(){
-		
-	}
 
-	public ClientGui(ClientService service)
-	{	this.service=service;
+	public ClientGui()
+	{	
 		gridBagCon.weightx = 0.5;
 		gridBagCon.weighty = 1.0;
 		gridBagCon.fill = GridBagConstraints.BOTH;
@@ -75,16 +71,7 @@ public class ClientGui extends JPanel {
 		inputTextTab.setEditable(false);
 		add(inputTextTab, gridBagCon);
 
-		inputTextTab.addActionListener(new ActionListener() {
-			public ClientService service;
-
-			public void actionPerformed(ActionEvent event) {
-				// getActionCommand sends the message;
-				this.service.sendMessage(event.getActionCommand());
-				outputTextTab.setText("");
-
-			}
-		});
+		
 
 	}
 
