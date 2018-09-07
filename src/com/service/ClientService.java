@@ -19,7 +19,7 @@ public class ClientService {
 	private Socket connection;
 	//dependency injection (constructor injection)
 	
-	private ClientGui gui; 
+	private ClientGui gui;
 	
 	public ClientService(String host, ClientGui gui) {
 		serverIp = host;
@@ -90,7 +90,7 @@ public class ClientService {
 	}
 
 	// send messages to server
-	private void sendMessage(String message) {
+	public void sendMessage(String message) {
 		try {
 			output.writeObject("CLIENT - " + message);
 			output.flush();

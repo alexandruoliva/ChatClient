@@ -22,12 +22,16 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
+import com.service.ClientService;
+
 public class ClientGui extends JPanel {
 	JPanel chatClient = new JPanel();
 	JTextField inputTextTab = new JTextField("client input text", 5);
 	JTextArea outputTextTab = new JTextArea(5, 5);
 	GridBagConstraints gridBagCon = new GridBagConstraints();
 	
+	
+	private ClientService service;
 	
 	
 	public JTextField getInputTextTab() {
@@ -46,7 +50,8 @@ public class ClientGui extends JPanel {
 		this.outputTextTab = outputTextTab;
 	}
 
-	public ClientGui() {
+	public ClientGui(ClientService service)
+	{	this.service=service;
 		gridBagCon.weightx = 0.5;
 		gridBagCon.weighty = 1.0;
 		gridBagCon.fill = GridBagConstraints.BOTH;
@@ -68,9 +73,11 @@ public class ClientGui extends JPanel {
 		add(inputTextTab, gridBagCon);
 
 		inputTextTab.addActionListener(new ActionListener() {
+			public ClientService service;
+
 			public void actionPerformed(ActionEvent event) {
 				// getActionCommand sends the message;
-				sendMessage(event.getActionCommand());
+				this.service.sendMessage(event.getActionCommand());
 				outputTextTab.setText("");
 
 			}
