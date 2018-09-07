@@ -49,6 +49,9 @@ public class ClientGui extends JPanel {
 	public void setOutputTextTab(JTextArea outputTextTab) {
 		this.outputTextTab = outputTextTab;
 	}
+	public ClientGui(){
+		
+	}
 
 	public ClientGui(ClientService service)
 	{	this.service=service;
