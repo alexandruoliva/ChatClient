@@ -49,6 +49,7 @@ public class ClientGui extends JPanel {
 		gridBagCon.gridx = 0;
 		gridBagCon.gridy = 0;
 		add(outputTextTab, gridBagCon);
+		add(new JScrollPane(outputTextTab),gridBagCon);
 
 		gridBagCon.gridx = 0;
 		gridBagCon.gridy = 1;
