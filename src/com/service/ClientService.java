@@ -104,10 +104,13 @@ public class ClientService implements Observer {
 			message = clientGui.getInputTextTab().getText();
 
 			if (Character.isDigit(message.charAt(0))) {
-				int n = Integer.parseInt(message);
+
+				int n = Integer.parseInt(regexChecker("\\d+", message));
+				message=regexReplace(message);
 				// regexChecker("", message)
+				int m = n;
 				for (int i = 0; i < n; i++) {
-					output.writeObject("CLIENT - " + message);
+					output.writeObject("CLIENT - " + (m--) + message);
 					output.flush();
 					showMessage("\nClient -" + message);
 					try {
@@ -117,7 +120,8 @@ public class ClientService implements Observer {
 						e.printStackTrace();
 					}
 				}
-				n=0;
+				n = 0;
+				m = 0;
 			} else {
 				output.writeObject("CLIENT - " + message);
 				output.flush();
@@ -144,7 +148,7 @@ public class ClientService implements Observer {
 	private void ableToType(final boolean trueOrFalse) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				
+
 				clientGui.getInputTextTab().setText("");
 				clientGui.getInputTextTab().setEditable(trueOrFalse);
 			}
@@ -156,17 +160,25 @@ public class ClientService implements Observer {
 		sendMessage(clientGui);
 	}
 
-	public void regexChecker(String theRegex, String str2Check) {
+	public String regexChecker(String theRegex, String str2Check) {
 		Pattern checkRegex = Pattern.compile(theRegex);
 
 		Matcher regexMatcher = checkRegex.matcher(str2Check);
 
 		while (regexMatcher.find()) {
 			if (regexMatcher.group().length() != 0) {
-				System.out.println(regexMatcher.group().trim());
+				return regexMatcher.group().trim();
 			}
 			System.out.println("start index" + regexMatcher.start());
 			System.out.println("End index" + regexMatcher.end());
 		}
+		return regexMatcher.group().trim();
+	}
+
+	public String regexReplace(String str2Replace) {
+		Pattern replace = Pattern.compile("\\d+");
+
+		return replace.matcher(str2Replace).replaceAll("");
+		
 	}
 }

@@ -15,7 +15,7 @@ public class ClientMain {
 		ClientGui clientGui = new ClientGui();
 
 		ClientService clientService = new ClientService("127.0.01", clientGui);
-		
+
 		clientGui.addObserver(clientService);
 		clientGui.setSize(700, 700);
 		clientGui.setVisible(true);
