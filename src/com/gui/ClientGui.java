@@ -1,39 +1,70 @@
 package com.gui;
 
-import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.EOFException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.InetAddress;
-import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 
-import com.service.ClientService;
+import com.observer.Observer;
+import com.observer.Subject;
 
-public class ClientGui extends JPanel {
-	JPanel chatClient = new JPanel();
-	JTextField inputTextTab = new JTextField("client input text", 5);
-	JTextArea outputTextTab = new JTextArea(5, 5);
-	GridBagConstraints gridBagCon = new GridBagConstraints();
+public class ClientGui extends JPanel implements Subject {
+
+	private static final long serialVersionUID = -8933520114530300981L;
+
+	private JPanel chatClient;
+	private JTextField inputTextTab;
+	private JTextArea outputTextTab;
+	private GridBagConstraints gridBagCon;
+
+	List<Observer> observers ;
+
+	public ClientGui() {
+		observers = new ArrayList<>();
+		initGuiElements();
+
+		inputTextTab.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				notifyObservers();
+				getOutputTextTab().setText("");
+			}
+		});
+
+	}
+
+	@Override
+	public void addObserver(Observer observer) {
+		observers.add(observer);
+
+	}
+
+	@Override
+	public void deleteObserver(Observer deletedObserver) {
+		int indexOfList = observers.indexOf(deletedObserver);
+		System.out.println("Observer " + (indexOfList + 1) + "deleted");
+		observers.remove(indexOfList);
+	}
 	
-	
-	private ClientService service;
-	
-	
+	@Override
+	public void notifyObservers() {
+		System.out.println("notifying all services , when somethign changes in the GUI ");
+		for (Observer observer : observers) {
+			observer.update(this);
+		}
+	}
+
 	public JTextField getInputTextTab() {
 		return inputTextTab;
 	}
@@ -49,12 +80,14 @@ public class ClientGui extends JPanel {
 	public void setOutputTextTab(JTextArea outputTextTab) {
 		this.outputTextTab = outputTextTab;
 	}
-	public ClientGui(){
-		
-	}
 
-	public ClientGui(ClientService service)
-	{	this.service=service;
+	private void initGuiElements() {
+		
+		chatClient = new JPanel();
+		inputTextTab = new JTextField("client input text", 5);
+		outputTextTab = new JTextArea(5, 5);
+		gridBagCon = new GridBagConstraints();
+
 		gridBagCon.weightx = 0.5;
 		gridBagCon.weighty = 1.0;
 		gridBagCon.fill = GridBagConstraints.BOTH;
@@ -74,17 +107,6 @@ public class ClientGui extends JPanel {
 		gridBagCon.gridy = 1;
 		inputTextTab.setEditable(false);
 		add(inputTextTab, gridBagCon);
-
-		inputTextTab.addActionListener(new ActionListener() {
-			public ClientService service;
-
-			public void actionPerformed(ActionEvent event) {
-				// getActionCommand sends the message;
-				this.service.sendMessage(event.getActionCommand());
-				outputTextTab.setText("");
-
-			}
-		});
 
 	}
 
