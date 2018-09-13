@@ -34,7 +34,6 @@ public class ClientGui extends JPanel implements Subject {
 		initGuiElements();
 
 		inputTextTab.addActionListener(new ActionListener() {
-			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				notifyObservers();

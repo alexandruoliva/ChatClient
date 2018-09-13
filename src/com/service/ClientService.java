@@ -22,7 +22,6 @@ public class ClientService implements Observer {
 	private String message = "";
 	private String serverIp;
 	private Socket connection;
-	private boolean specialMessage;
 	// dependency injection (constructor injection)
 
 	static ClientGui clientGui;
@@ -106,15 +105,17 @@ public class ClientService implements Observer {
 
 			if (Character.isDigit(message.charAt(0))) {
 
-				MessageSender.runThread(message, output);
+				new MessageSender(message, output).start();
 			} else {
 				output.writeObject("CLIENT - " + message);
 				output.flush();
 				showMessage("\nClient -" + message);
+
 			}
 		} catch (IOException ioException) {
 			clientGui.getOutputTextTab().append("\n something messed up sending message hoss");
 		}
+		clientGui.getInputTextTab().setText(null);
 
 	}
 

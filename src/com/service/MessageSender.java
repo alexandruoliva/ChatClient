@@ -5,23 +5,36 @@ import java.io.ObjectOutputStream;
 
 public class MessageSender extends Thread {
 
+	String message;
 	
-	static void runThread( String message, ObjectOutputStream output) throws IOException {
-		
-		MessageSender thread =new MessageSender();
+	ObjectOutputStream output;
+	
+	public MessageSender(String message, ObjectOutputStream output) {
+		this.message = message;
+		this.output = output;
+	}
+	
+	public void run() {
 		int n = Integer.parseInt(Regex.regexChecker("\\d+", message));
 		message=Regex.regexReplaceNumbers(message);
-		thread.run();
+		ClientService.showMessage("\nClient -" +n+' '+ message);
 		for (int i = 0; i < n; i++) {
-			output.writeObject("CLIENT - " + (n-i) + message);
-			output.flush();
-			ClientService.showMessage("\nClient -" + message);
+			try {
+				output.writeObject("CLIENT - " + (n-i) +' '+ message);
+				output.flush();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			
+			
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
+		message="";
+		
 	}
 	
 }
