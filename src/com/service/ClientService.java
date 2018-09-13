@@ -25,11 +25,15 @@ public class ClientService implements Observer {
 	private boolean specialMessage;
 	// dependency injection (constructor injection)
 
-	ClientGui clientGui;
+	static ClientGui clientGui;
 
 	public ClientService(String host, ClientGui clientGui) {
 		serverIp = host;
 		this.clientGui = clientGui;
+	}
+
+	public ClientService() {
+		// TODO Auto-generated constructor stub
 	}
 
 	public void startRunning() {
@@ -98,30 +102,11 @@ public class ClientService implements Observer {
 	// send messages to server
 	public void sendMessage(ClientGui clientGui) {
 		try {
-			// output.writeObject("CLIENT - " + message);
-			// output.flush();
-			// showMessage("\nClient -" + message);
 			message = clientGui.getInputTextTab().getText();
 
 			if (Character.isDigit(message.charAt(0))) {
 
-				int n = Integer.parseInt(regexChecker("\\d+", message));
-				message=regexReplace(message);
-				// regexChecker("", message)
-				int m = n;
-				for (int i = 0; i < n; i++) {
-					output.writeObject("CLIENT - " + (m--) + message);
-					output.flush();
-					showMessage("\nClient -" + message);
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-				n = 0;
-				m = 0;
+				MessageSender.runThread(message, output);
 			} else {
 				output.writeObject("CLIENT - " + message);
 				output.flush();
@@ -134,7 +119,7 @@ public class ClientService implements Observer {
 	}
 
 	// update the chatwindow
-	private void showMessage(final String text) {
+	static void showMessage(final String text) {
 		SwingUtilities.invokeLater(new Runnable() {
 
 			public void run() {
@@ -160,25 +145,4 @@ public class ClientService implements Observer {
 		sendMessage(clientGui);
 	}
 
-	public String regexChecker(String theRegex, String str2Check) {
-		Pattern checkRegex = Pattern.compile(theRegex);
-
-		Matcher regexMatcher = checkRegex.matcher(str2Check);
-
-		while (regexMatcher.find()) {
-			if (regexMatcher.group().length() != 0) {
-				return regexMatcher.group().trim();
-			}
-			System.out.println("start index" + regexMatcher.start());
-			System.out.println("End index" + regexMatcher.end());
-		}
-		return regexMatcher.group().trim();
-	}
-
-	public String regexReplace(String str2Replace) {
-		Pattern replace = Pattern.compile("\\d+");
-
-		return replace.matcher(str2Replace).replaceAll("");
-		
-	}
 }
