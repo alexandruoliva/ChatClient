@@ -66,7 +66,7 @@ public class ClientService implements Observer {
 		output.flush();
 		input = new ObjectInputStream(connection.getInputStream());
 		showMessage("\n Dear client your streams are good to go! \n");
-
+		
 	}
 
 	// while chatting with server
