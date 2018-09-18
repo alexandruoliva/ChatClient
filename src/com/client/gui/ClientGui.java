@@ -58,7 +58,7 @@ public class ClientGui extends JPanel implements Subject {
 	
 	@Override
 	public void notifyObservers() {
-		System.out.println("notifying all services , when somethign changes in the GUI ");
+		System.out.println("notifying all services , when somethign changes in the client GUI ");
 		for (Observer observer : observers) {
 			observer.update(this);
 		}

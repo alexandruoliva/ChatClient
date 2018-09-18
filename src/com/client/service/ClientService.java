@@ -23,7 +23,7 @@ public class ClientService implements Observer {
 	private String serverIp;
 	private Socket connection;
 	// dependency injection (constructor injection)
-
+	
 	static ClientGui clientGui;
 
 	public ClientService(String host, ClientGui clientGui) {
