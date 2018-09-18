@@ -1,43 +1,38 @@
-package com.service;
+package com.client.service;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.SwingUtilities;
 
-import com.gui.ClientGui;
+import com.client.gui.ClientGui;
+import com.client.observer.Observer;
+import com.client.observer.Subject;
 
-public class ClientService {
-	private ObjectOutputStream output;
+public class ClientService implements Observer {
+
+	private static ObjectOutputStream output;
 	private ObjectInputStream input;
 	private String message = "";
 	private String serverIp;
 	private Socket connection;
-	//dependency injection (constructor injection)
+	// dependency injection (constructor injection)
 	
-	private ClientGui gui;
-	
-	public ClientService(String host, ClientGui gui) {
+	static ClientGui clientGui;
+
+	public ClientService(String host, ClientGui clientGui) {
 		serverIp = host;
-		this.gui=gui;
-		
-		this.gui.getInputTextTab().addActionListener(new ActionListener() {
-			public ClientService service;
-			private ClientGui gui;
+		this.clientGui = clientGui;
+	}
 
-			public void actionPerformed(ActionEvent event) {
-				// getActionCommand sends the message;
-				this.service.sendMessage(event.getActionCommand());
-				this.gui.getOutputTextTab().setText("");
-
-			}
-		});
+	public ClientService() {
+		// TODO Auto-generated constructor stub
 	}
 
 	public void startRunning() {
@@ -63,7 +58,6 @@ public class ClientService {
 		showMessage("Attempting connection ... \n");
 		connection = new Socket(InetAddress.getByName(serverIp), 6789);
 		showMessage("Connected to: " + connection.getInetAddress().getHostName());
-
 	}
 
 	// set up streams to send and receive messages
@@ -72,7 +66,7 @@ public class ClientService {
 		output.flush();
 		input = new ObjectInputStream(connection.getInputStream());
 		showMessage("\n Dear client your streams are good to go! \n");
-
+		
 	}
 
 	// while chatting with server
@@ -80,8 +74,10 @@ public class ClientService {
 		ableToType(true);
 		do {
 			try {
+
 				message = (String) input.readObject();
 				showMessage("\n" + message);
+
 			} catch (ClassNotFoundException classNotFoundException) {
 				showMessage("\n I don't know that object type!");
 			}
@@ -103,26 +99,32 @@ public class ClientService {
 	}
 
 	// send messages to server
-	public void sendMessage(String message) {
+	public void sendMessage(ClientGui clientGui) {
 		try {
-			output.writeObject("CLIENT - " + message);
-			output.flush();
-			showMessage("\nClient -" + message);
+			message = clientGui.getInputTextTab().getText();
+
+			if (Character.isDigit(message.charAt(0))) {
+
+				new MessageSender(message, output).start();
+			} else {
+				output.writeObject("CLIENT - " + message);
+				output.flush();
+				showMessage("\nClient -" + message);
+
+			}
 		} catch (IOException ioException) {
-			
-			
-			this.gui.getOutputTextTab().append("\n something messed up sending message hoss");
-			
+			clientGui.getOutputTextTab().append("\n something messed up sending message hoss");
 		}
+		clientGui.getInputTextTab().setText(null);
+
 	}
 
 	// update the chatwindow
-	private void showMessage(final String text) {
+	static void showMessage(final String text) {
 		SwingUtilities.invokeLater(new Runnable() {
-			private ClientGui gui;
 
 			public void run() {
-				this.gui.getOutputTextTab().append(text);
+				clientGui.getOutputTextTab().append(text);
 
 			}
 		});
@@ -131,17 +133,17 @@ public class ClientService {
 	// let the user type stuff into their box
 	private void ableToType(final boolean trueOrFalse) {
 		SwingUtilities.invokeLater(new Runnable() {
-			private ClientGui gui;
-
 			public void run() {
-				
-				this.gui.getInputTextTab().setText("");
-				this.gui.getInputTextTab().setEditable(trueOrFalse);
+
+				clientGui.getInputTextTab().setText("");
+				clientGui.getInputTextTab().setEditable(trueOrFalse);
 			}
 		});
 	}
-	
-	
 
-	
+	@Override
+	public void update(Subject subject) {
+		sendMessage(clientGui);
+	}
+
 }
