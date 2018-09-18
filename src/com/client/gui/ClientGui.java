@@ -1,4 +1,4 @@
-package com.gui;
+package com.client.gui;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -15,8 +15,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import com.observer.Observer;
-import com.observer.Subject;
+import com.client.observer.Observer;
+import com.client.observer.Subject;
 
 public class ClientGui extends JPanel implements Subject {
 

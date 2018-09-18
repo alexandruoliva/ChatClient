@@ -1,4 +1,4 @@
-package com.service;
+package com.client.service;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -11,9 +11,9 @@ import java.util.regex.Pattern;
 
 import javax.swing.SwingUtilities;
 
-import com.gui.ClientGui;
-import com.observer.Observer;
-import com.observer.Subject;
+import com.client.gui.ClientGui;
+import com.client.observer.Observer;
+import com.client.observer.Subject;
 
 public class ClientService implements Observer {
 

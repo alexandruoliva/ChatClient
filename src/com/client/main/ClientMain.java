@@ -1,10 +1,10 @@
-package com.main;
+package com.client.main;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
-import com.gui.ClientGui;
-import com.service.ClientService;
+import com.client.gui.ClientGui;
+import com.client.service.ClientService;
 
 public class ClientMain {
 

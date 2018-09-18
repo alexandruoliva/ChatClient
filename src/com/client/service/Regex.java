@@ -1,4 +1,4 @@
-package com.service;
+package com.client.service;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

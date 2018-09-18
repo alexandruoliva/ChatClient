@@ -1,4 +1,4 @@
-package com.service;
+package com.client.service;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
