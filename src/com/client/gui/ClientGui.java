@@ -104,7 +104,7 @@ public class ClientGui extends JPanel implements Subject {
 
 		gridBagCon.gridx = 0;
 		gridBagCon.gridy = 1;
-		inputTextTab.setEditable(false);
+		inputTextTab.setEditable(true);
 		add(inputTextTab, gridBagCon);
 
 	}

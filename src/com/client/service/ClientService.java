@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,7 +16,7 @@ import com.client.gui.ClientGui;
 import com.client.observer.Observer;
 import com.client.observer.Subject;
 
-public class ClientService implements Observer {
+public class ClientService extends Thread implements Observer {
 
 	private static ObjectOutputStream output;
 	private ObjectInputStream input;
@@ -30,9 +31,26 @@ public class ClientService implements Observer {
 		serverIp = host;
 		this.clientGui = clientGui;
 	}
+	
+//	public ClientService(String host, ClientGui clientGui,Socket socket,ObjectOutputStream output, ObjectInputStream input) throws IOException, IOException{
+//		serverIp = host;
+//		this.clientGui = clientGui;
+//		socket =new Socket(InetAddress.getByName(serverIp), 6789);
+//		output= new ObjectOutputStream(connection.getOutputStream());
+//		input = new ObjectInputStream(connection.getInputStream());
+//		
+//	}
 
 	public ClientService() {
 		// TODO Auto-generated constructor stub
+	}
+	
+	@Override
+	public void run(){
+		output =null;
+		input = null;
+		
+		startRunning();
 	}
 
 	public void startRunning() {
@@ -52,7 +70,9 @@ public class ClientService implements Observer {
 			closeChat();
 		}
 
+	
 	}
+	
 
 	private void connectToServer() throws IOException {
 		showMessage("Attempting connection ... \n");
@@ -62,9 +82,10 @@ public class ClientService implements Observer {
 
 	// set up streams to send and receive messages
 	private void setUpStreams() throws IOException {
+		input = new ObjectInputStream(connection.getInputStream());
+
 		output = new ObjectOutputStream(connection.getOutputStream());
 		output.flush();
-		input = new ObjectInputStream(connection.getInputStream());
 		showMessage("\n Dear client your streams are good to go! \n");
 		
 	}
@@ -145,5 +166,6 @@ public class ClientService implements Observer {
 	public void update(Subject subject) {
 		sendMessage(clientGui);
 	}
+
 
 }

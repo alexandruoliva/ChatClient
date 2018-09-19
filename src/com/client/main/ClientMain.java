@@ -20,7 +20,13 @@ public class ClientMain {
 		clientGui.setSize(700, 700);
 		clientGui.setVisible(true);
 		clientGui.buildFrame(icon, clientGui, new JFrame(), "Client Chat");
-
-		clientService.startRunning();
+		
+		clientService.start();
+		
+		
+		
+		
+		
+		
 	}
 }
