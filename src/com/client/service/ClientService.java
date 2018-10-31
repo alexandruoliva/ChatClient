@@ -60,9 +60,6 @@ public class ClientService extends Thread implements Observer {
 
 			setUpStreams();
 			
-			Thread readerThread = new Thread ( new IncomingReader());
-			readerThread.start(); 
-			
 			whileChatting();
 			
 		} catch (EOFException eofException) {

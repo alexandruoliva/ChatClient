@@ -5,23 +5,15 @@ import javax.swing.JFrame;
 
 import com.client.gui.ClientGui;
 import com.client.service.ClientService;
+import com.client.service.IncomingReader;
 
 public class ClientMain {
 
 	public static void main(String[] args) {
-
-		ImageIcon icon = new ImageIcon("C://Users/aoliva/Desktop/JAVA WORKSPACE/ChatClient/download.png");
-
-		ClientGui clientGui = new ClientGui();
-
-		ClientService clientService = new ClientService("127.0.01", clientGui);
-
-		clientGui.addObserver(clientService);
-		clientGui.setSize(700, 700);
-		clientGui.setVisible(true);
-		clientGui.buildFrame(icon, clientGui, new JFrame(), "Client Chat");
+		Thread readerThread = new Thread ( new IncomingReader());
+		readerThread.start();
 		
-		clientService.start();
+		
 		
 		
 		
