@@ -59,9 +59,12 @@ public class ClientService extends Thread implements Observer {
 			connectToServer();
 
 			setUpStreams();
-
+			
+			Thread readerThread = new Thread ( new IncomingReader());
+			readerThread.start(); 
+			
 			whileChatting();
-
+			
 		} catch (EOFException eofException) {
 			showMessage("\n Client terminated the connection");
 		} catch (IOException ioException) {
@@ -90,7 +93,7 @@ public class ClientService extends Thread implements Observer {
 	}
 
 	// while chatting with server
-	private void whileChatting() throws IOException {
+	public  void whileChatting() throws IOException {
 		ableToType(true);
 		do {
 			try {
