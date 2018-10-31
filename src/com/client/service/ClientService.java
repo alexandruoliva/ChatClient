@@ -83,7 +83,6 @@ public class ClientService extends Thread implements Observer {
 	// set up streams to send and receive messages
 	private void setUpStreams() throws IOException {
 		input = new ObjectInputStream(connection.getInputStream());
-
 		output = new ObjectOutputStream(connection.getOutputStream());
 		output.flush();
 		showMessage("\n Dear client your streams are good to go! \n");
